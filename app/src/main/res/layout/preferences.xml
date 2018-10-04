@@ -33,7 +33,7 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_exclude_from_recents"
-            android:summary="按键或语音唤醒后，不显示在最近任务列表中"
+            android:summary="按键或语音唤醒后(直接点击图标除外)，不显示在最近任务列表中"
             android:title="从最近任务排除"/>
     </PreferenceCategory>
 </PreferenceScreen>
