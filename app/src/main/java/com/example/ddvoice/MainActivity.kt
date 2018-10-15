@@ -67,7 +67,7 @@ class MainActivity : Activity(), EventListener {
     //    private val mIatResults = LinkedHashMap<String, String>()
     // 引擎类型
     //    private val mEngineType = SpeechConstant.TYPE_CLOUD
-//    private lateinit var mSharedPreferences: SharedPreferences
+    //    private lateinit var mSharedPreferences: SharedPreferences
     //    private lateinit var mSharedPreferencesTTS: SharedPreferences
     
     
@@ -113,7 +113,7 @@ class MainActivity : Activity(), EventListener {
             gBNlpCanceled = true
             startActivity(Intent(this, PreferencesActivity::class.java))
         }
-    
+        
         val txt = dlgView.findViewWithTag("textlink") as TextView
         
         mTipsLocked = FlowerCollector.getOnlineParams(applicationContext, "tipsLocked")?.split(",")
@@ -323,7 +323,7 @@ class MainActivity : Activity(), EventListener {
             FlowerCollector.updateOnlineConfig(applicationContext) {
                 //回调仅在参数有变化时发生
             }
-    
+            
             //baidu statistic
             StatService.start(this)
         }
@@ -840,15 +840,15 @@ class MainActivity : Activity(), EventListener {
                         val contentType = getSlotValueByName("contentType") ?: ""
                         if (contentType == "voice") {  //语音
                             speak("发语音技能还在学习中，查找$gWxContact")
-//                            startActivity(Intent().setComponent(ComponentName("com.tencent.mm",
-//                                    "com.tencent.mm.ui.LauncherUI")).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                            //                            startActivity(Intent().setComponent(ComponentName("com.tencent.mm",
+                            //                                    "com.tencent.mm.ui.LauncherUI")).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                             wxContact()
                         } else {
                             if (arrayOf("saoyisao", "saoma", "erweima", "saomiaoerweima").contains
                                     (contactPinYin)) {
                                 gWxContact = ""
                                 return wxScan()
-                            } else if (gWxContact == "发红包"){
+                            } else if (gWxContact == "发红包") {
                                 return speak("试试说：给谁谁发红包")
                             }
                             
@@ -872,9 +872,9 @@ class MainActivity : Activity(), EventListener {
                         val howMuch = getSlotValueByName("how_much")
                         if (howMuch.isNullOrEmpty()) sayOK() else speak("暂不支持具体金额，跳到界面")
                         //                        speak("发红包技能还在学习中，查找$gWxContact")
-//                        startActivity(Intent().setComponent(ComponentName("com.tencent.mm",
-//                                "com.tencent.mm.ui.LauncherUI")).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-//                        wxContact()
+                        //                        startActivity(Intent().setComponent(ComponentName("com.tencent.mm",
+                        //                                "com.tencent.mm.ui.LauncherUI")).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                        //                        wxContact()
                         wxRedBag("")
                     }
                     "scan_qrcode" -> {
@@ -1064,7 +1064,8 @@ class MainActivity : Activity(), EventListener {
             "telephone"/*, "LXY.tel"*/ -> {
                 val contact = parsedSemanticResult!!.data?.optJSONArray("result")
                         ?.optJSONObject(0)
-                val name = contact?.optString("name") ?: getSlotValueByName("name")
+                val name = contact?.optString("name") ?: getSlotValueByName("name") +
+                getSlotValueByName("teleOperator")
                 val code = contact?.optString("phoneNumber") ?: getSlotValueByName("code")
                 //                val name = getSlotValueByName("name")
                 //                val code = getSlotValueByName("code")
@@ -1275,7 +1276,7 @@ class MainActivity : Activity(), EventListener {
         
         //        var quitAtOnce = true
         //        var shouldFinishSelf = true
-//        val starter = Intent()
+        //        val starter = Intent()
         
         //        val resultPinYin = PinyinHelper.convertToPinyinString(asrResult, "", PinyinFormat
         //                .WITHOUT_TONE)
@@ -1299,11 +1300,11 @@ class MainActivity : Activity(), EventListener {
                     .WITHOUT_TONE)) {
                 "shezhi", "xiaomeishezhi", "shezhixiaomei" -> startActivity(Intent(this,
                         PreferencesActivity::class
-                        .java))
+                                .java))
                 "quxiaotixing", "quxiaonaozhong" -> ScheduleCreate("clock", "", null, "",
                         applicationContext).cancelClock()
                 "paizhao", "woyaopaizhao", "paizhaopaizhao" -> {
-//                    sayOK()
+                    //                    sayOK()
                     launchCamera()
                 }
                 "bofang" -> replayMusic()
@@ -1442,7 +1443,7 @@ class MainActivity : Activity(), EventListener {
         asr!!.send(event, json, null, 0, 0)*/
         
         if (BuildConfig.DEBUG) {
-//           donate()
+            //           donate()
         }
     }
     
