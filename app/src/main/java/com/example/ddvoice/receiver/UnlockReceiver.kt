@@ -19,10 +19,10 @@ class UnlockReceiver : BroadcastReceiver() {
         gIsPhoneLocked = false  //myKM.inKeyguardRestrictedInputMode()
     
         stopWakeUp()
-        if (gAccessibilityService.needsUsageStatsPermission()) {
-            gAccessibilityService.requestUsageStatsPermission()
-            //            return
-        }
+//        if (gAccessibilityService.needsUsageStatsPermission()) {
+//            gAccessibilityService.requestUsageStatsPermission()
+//            //            return
+//        }
         startChecker()
     
         if (!gWakeUpTipShown) {
