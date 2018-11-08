@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.PowerManager
 import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
 import com.example.ddvoice.*
 import com.example.ddvoice.util.*
 import com.github.stuxuhai.jpinyin.PinyinFormat
@@ -228,6 +230,23 @@ fun turnOnUsageAccess() {
     } catch (e: Exception) {
         e.printStackTrace()
     }
+}
+
+fun turnOnLight() {
+    speak("开灯")
+    val request = JsonObjectRequest(
+            Request.Method.GET, "https://maker.ifttt.com/trigger/xv_light_on/with/key/dqRcv4OrkIOThtRCxIH6bq",
+            null, { jsonObj -> }, { jsonObj -> })
+    gVolleyQueue.add(request)
+}
+
+
+fun turnOffLight() {
+    speak("关灯")
+    val request = JsonObjectRequest(
+            Request.Method.GET, "https://maker.ifttt.com/trigger/xv_light_off/with/key/dqRcv4OrkIOThtRCxIH6bq",
+            null, { jsonObj -> }, { jsonObj -> })
+    gVolleyQueue.add(request)
 }
 
 

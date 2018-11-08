@@ -4,6 +4,7 @@ import android.Manifest
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -12,7 +13,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.support.v7.app.AlertDialog
 import android.telephony.TelephonyManager
 import android.text.Html
 import android.text.TextUtils
@@ -47,7 +47,7 @@ import java.net.URL
 import java.util.*
 import kotlin.concurrent.thread
 
-//wake up word: 小美小美,关闭手电筒,打开手电筒,播放,暂停,上一首,下一首,微信扫码,拍照拍照
+//wake up word: 小美小美,关闭手电筒,打开手电筒,开灯开灯,暂停,上一首,下一首,拍照拍照
 
 var gAIUIAgent: AIUIAgent? = null
 //var gUrlToLoad = ""
@@ -760,6 +760,18 @@ class MainActivity : Activity(), EventListener {
             return null
         }
         
+        fun getAttrValueByName(name: String): String? {
+            val slots = semantic?.optJSONArray("slots") ?: return null
+            
+            for (i in 0 until slots.length()) {
+                val slot = slots.optJSONObject(i)
+                if (slot.optString("attr") == name) {
+                    return slot.optString("attrValue")
+                }
+            }
+            return null
+        }
+        
         //        fun getSlotNormValueByName(name: String): String? {
         //            val slots = semantic?.optJSONArray("slots") ?: return null
         //
@@ -1193,11 +1205,8 @@ class MainActivity : Activity(), EventListener {
                 }
             }
             "light_smartHome" -> {
-                sayOK()
-                val request = JsonObjectRequest(
-                        Request.Method.GET, "https://maker.ifttt.com/trigger/xv_light_on/with/key/dqRcv4OrkIOThtRCxIH6bq",
-                        null, { jsonObj -> }, { jsonObj -> })
-                gVolleyQueue.add(request)
+                val switchVal = getAttrValueByName("开关")
+                if (switchVal == "开") turnOnLight() else turnOffLight()
             }
             "" -> {     //aiui未命中
                 onAsrResult(text)
