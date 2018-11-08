@@ -4,6 +4,7 @@ import android.Manifest
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
@@ -12,7 +13,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.support.v7.app.AlertDialog
 import android.telephony.TelephonyManager
 import android.text.Html
 import android.text.TextUtils
@@ -47,7 +47,7 @@ import java.net.URL
 import java.util.*
 import kotlin.concurrent.thread
 
-//wake up word: 小美小美,关闭手电筒,打开手电筒,播放,暂停,上一首,下一首,微信扫码,拍照拍照
+//wake up word: 小美小美,关闭手电筒,打开手电筒,开灯开灯,暂停,上一首,下一首,拍照拍照
 
 var gAIUIAgent: AIUIAgent? = null
 //var gUrlToLoad = ""
@@ -760,6 +760,18 @@ class MainActivity : Activity(), EventListener {
             return null
         }
         
+        fun getAttrValueByName(name: String): String? {
+            val slots = semantic?.optJSONArray("slots") ?: return null
+            
+            for (i in 0 until slots.length()) {
+                val slot = slots.optJSONObject(i)
+                if (slot.optString("attr") == name) {
+                    return slot.optString("attrValue")
+                }
+            }
+            return null
+        }
+        
         //        fun getSlotNormValueByName(name: String): String? {
         //            val slots = semantic?.optJSONArray("slots") ?: return null
         //
@@ -1188,47 +1200,14 @@ class MainActivity : Activity(), EventListener {
                             else -> saySorry()
                         }
                     }
-                    /*"cmd" -> {
-                        val insType = getSlotValueByName("insType") ?: ""
-                        when (insType) {
-                            //                    "sleep" -> gTts?.stop()
-                            "volume_minus" -> {
-                                sayOK()
-                                gAudioManager.adjustStreamVolume(AudioManager
-                                        .STREAM_MUSIC, AudioManager.ADJUST_LOWER,
-                                        AudioManager.FX_FOCUS_NAVIGATION_UP)
-                            }
-                            "volume_plus" -> {
-                                sayOK()
-                                gAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                                        AudioManager.ADJUST_RAISE,
-                                        AudioManager.FX_FOCUS_NAVIGATION_UP)
-                            }
-                            "mute" -> {
-                                sayOK()
-                                gAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                                        AudioManager.ADJUST_MUTE,
-                                        AudioManager.FX_FOCUS_NAVIGATION_UP)
-                            }
-                            "unmute" -> {
-                                sayOK()
-                                gAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                                        AudioManager.ADJUST_UNMUTE,
-                                        AudioManager.FX_FOCUS_NAVIGATION_UP)
-                            }
-                            "sleep" -> { *//*闭嘴*//*
-                            }
-                            else -> saySorry()
-                        }
-                    }*/
-                    //                    "" -> {
-                    //                        val type = getSlotValueByName("")
-                    //                    }
                     else -> {
                         saySorry()
                     }
                 }
-                
+            }
+            "light_smartHome" -> {
+                val switchVal = getAttrValueByName("开关")
+                if (switchVal == "开") turnOnLight() else turnOffLight()
             }
             "" -> {     //aiui未命中
                 onAsrResult(text)

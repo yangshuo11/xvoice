@@ -133,11 +133,9 @@ class MyAccessibilityService : AccessibilityService() {
                             launchCamera()
                         }
                         params!!.contains("打开手电筒") -> {
-                            sayOK()
                             trunOnFlash()
                         }
                         params!!.contains("关闭手电筒") -> {
-                            sayOK()
                             turnOffFlash()
                         }
                         params!!.contains("播放") -> {
@@ -156,8 +154,10 @@ class MyAccessibilityService : AccessibilityService() {
                             prevMusic()
                         }
                         params!!.contains("微信扫码") -> {
-//                            sayOK()
                             wxScan()
+                        }
+                        params!!.contains("开灯开灯") -> {
+                            turnOnLight()
                         }
                         else -> //                    stopWakeUp()
                             startMainAct()

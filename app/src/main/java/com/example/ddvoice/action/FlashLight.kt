@@ -5,6 +5,7 @@ import android.hardware.Camera
 import android.hardware.camera2.CameraManager
 import android.os.Build
 import com.example.ddvoice.gApplicationContext
+import com.example.ddvoice.sayOK
 
 
 /**
@@ -12,6 +13,7 @@ import com.example.ddvoice.gApplicationContext
  */
 //@SuppressLint("NewApi")
 fun trunOnFlash() {
+    sayOK()
     try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             manager = gApplicationContext?.getSystemService(Context.CAMERA_SERVICE) as
@@ -29,7 +31,6 @@ fun trunOnFlash() {
     } catch (e: Exception) {
         e.printStackTrace()
     }
-    
 }
 
 var camera: Camera? = null
@@ -38,7 +39,7 @@ var manager: CameraManager? = null
 
 //@SuppressLint("NewApi")
 fun turnOffFlash() {
-    
+    sayOK()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         try {
             if (manager == null) {
