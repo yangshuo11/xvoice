@@ -224,7 +224,7 @@ class MainActivity : Activity(), EventListener {
         if (intent.action == "show_wake_up_tip") {
             speak("主子，因为不想占用麦克风，而影响需要录音的app，解锁且不在桌面时我就听不到你的召唤了哦。" +
                     "此时可以长按home键或音量键叫我.息屏,锁定以及显示桌面状态都可以叫我“小美小美”召唤我。" +
-                    "还可以不叫我直接说“拍照”，以及“打开或关闭手电筒”哦。")
+                    "还可以不叫我直接说“拍照拍照”，以及“打开或关闭手电筒”哦。")
             AlertDialog.Builder(this).setTitle("小美：")
                     .setMessage("主子，因为不想占用麦克风，而影响需要录音的app，解锁且不在桌面时我就听不到你的召唤了哦。\n\n此时可以长按home" +
                             "键或音量键叫我\n" +
@@ -1076,7 +1076,8 @@ class MainActivity : Activity(), EventListener {
             "telephone"/*, "LXY.tel"*/ -> {
                 val contact = parsedSemanticResult!!.data?.optJSONArray("result")
                         ?.optJSONObject(0)
-                val name = contact?.optString("name") ?: getSlotValueByName("name")
+                val name = contact?.optString("name") ?: getSlotValueByName("name") +
+                getSlotValueByName("teleOperator")
                 val code = contact?.optString("phoneNumber") ?: getSlotValueByName("code")
                 //                val name = getSlotValueByName("name")
                 //                val code = getSlotValueByName("code")
@@ -1281,7 +1282,7 @@ class MainActivity : Activity(), EventListener {
                                 .java))
                 "quxiaotixing", "quxiaonaozhong" -> ScheduleCreate("clock", "", null, "",
                         applicationContext).cancelClock()
-                "paizhao", "woyaopaizhao" -> {
+                "paizhao", "woyaopaizhao", "paizhaopaizhao" -> {
                     //                    sayOK()
                     launchCamera()
                 }

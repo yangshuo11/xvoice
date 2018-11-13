@@ -223,12 +223,12 @@ class MyAccessibilityService : AccessibilityService() {
         unregisterReceiver(screenOffBroadcastReceiver)
     }
     
-    private fun needsUsageStatsPermission(): Boolean {
+    fun needsUsageStatsPermission(): Boolean {
         return postLollipop() && !hasUsageStatsPermission(this)
     }
     
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun requestUsageStatsPermission() {
+    fun requestUsageStatsPermission() {
         if (!hasUsageStatsPermission(this)) {
             startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             Handler().postDelayed({

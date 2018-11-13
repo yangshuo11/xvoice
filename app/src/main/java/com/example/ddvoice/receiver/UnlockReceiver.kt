@@ -17,7 +17,12 @@ class UnlockReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
         println("lyn______________: phone unlock")
         gIsPhoneLocked = false  //myKM.inKeyguardRestrictedInputMode()
-        
+    
+        stopWakeUp()
+//        if (gAccessibilityService.needsUsageStatsPermission()) {
+//            gAccessibilityService.requestUsageStatsPermission()
+//            //            return
+//        }
         startChecker()
     
         if (!gWakeUpTipShown) {

@@ -1,6 +1,5 @@
 package com.example.ddvoice
 
-import android.accessibilityservice.AccessibilityService
 import android.app.Activity
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
@@ -507,7 +506,7 @@ fun syncContacts(ctx: Context) {
 }*/
 
 lateinit var gApplicationContext: Context
-lateinit var gAccessibilityService: AccessibilityService
+lateinit var gAccessibilityService: MyAccessibilityService
 
 
 
