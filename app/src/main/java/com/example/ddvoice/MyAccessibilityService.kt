@@ -159,6 +159,9 @@ class MyAccessibilityService : AccessibilityService() {
                         params!!.contains("开灯开灯") -> {
                             turnOnLight()
                         }
+                        params!!.contains("关灯关灯") -> {
+                            turnOffLight()
+                        }
                         else -> //                    stopWakeUp()
                             startMainAct()
                     }
