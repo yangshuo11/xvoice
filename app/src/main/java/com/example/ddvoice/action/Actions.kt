@@ -7,11 +7,13 @@ import android.net.Uri
 import android.os.PowerManager
 import android.widget.Toast
 import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.example.ddvoice.*
 import com.example.ddvoice.util.*
 import com.github.stuxuhai.jpinyin.PinyinFormat
 import com.github.stuxuhai.jpinyin.PinyinHelper
+import org.json.JSONObject
 
 /**
  * Created by Lyn on 18-8-27.
@@ -173,6 +175,24 @@ fun wxRedBag(sum: String) {
 }
 
 /**
+ * habitica新增todo
+ */
+fun addHabiticaTodo(text: String) {
+    sayOK()
+    val bodyMap = mapOf("text" to text, "type" to "todo")
+    val request = JsonObjectHeaderRequest(
+            Request.Method.POST,
+            "https://habitica.com/api/v3/tasks/user",
+            JSONObject(bodyMap),
+            null,
+            Response.ErrorListener { error -> error.printStackTrace() }
+    )
+    gVolleyQueue.add(request)
+}
+
+
+
+/**
  * 钉钉打卡下班
  */
 fun punchOut() {
@@ -235,7 +255,7 @@ fun turnOnUsageAccess() {
 fun turnOnLight() {
     speak("开灯")
     val request = JsonObjectRequest(
-            Request.Method.GET, "https://maker.ifttt.com/trigger/xv_light_on/with/key/dqRcv4OrkIOThtRCxIH6bq",
+            Request.Method.GET, gLightOffUrl,
             null, { jsonObj -> }, { jsonObj -> })
     gVolleyQueue.add(request)
 }
@@ -244,7 +264,7 @@ fun turnOnLight() {
 fun turnOffLight() {
     speak("关灯")
     val request = JsonObjectRequest(
-            Request.Method.GET, "https://maker.ifttt.com/trigger/xv_light_off/with/key/dqRcv4OrkIOThtRCxIH6bq",
+            Request.Method.GET, gLightOffUrl,
             null, { jsonObj -> }, { jsonObj -> })
     gVolleyQueue.add(request)
 }
@@ -338,5 +358,13 @@ fun loadUrl(url: String, useOtherBrowser: Boolean = false) {
         gApplicationContext!!.startActivity(Intent(gApplicationContext, WebViewAct::class
                 .java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         //        }, 6500)
+    }
+}
+
+class JsonObjectHeaderRequest(method: Int, url: String?, jsonRequest: JSONObject?, listener: Response.Listener<JSONObject>?, errorListener: Response.ErrorListener?)
+    :JsonObjectRequest(method, url, jsonRequest, listener, errorListener) {
+    override fun getHeaders(): MutableMap<String, String> {
+        return mapOf("x-api-key" to gHbApiKey, "x-api-user" to
+                "98741a5f-60b6-4eeb-bf83-e2adb5f570a4").toMutableMap()
     }
 }

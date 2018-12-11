@@ -612,6 +612,9 @@ const val SP_VOLUME_KEY_WAKE = "pref_volume_key_wakeup"
 const val SP_VOICE_WAKE = "pref_voice_wakeup"
 const val SP_EXCLUDE_FROM_RECENTS = "pref_exclude_from_recents"
 const val SP_ACCESSIBILITY_ENABLED = "accessibilityEnabled"
+const val SP_HB_API_KEY = "pref_hb_api_key"
+const val SP_LIGHT_ON_URL = "pref_light_on_url"
+const val SP_LIGHT_OFF_URL = "pref_light_off_url"
 
 var gWakeUpTipShown = false     //only show once on home
 var gAccessibilityEnabled = false
@@ -619,6 +622,9 @@ var gBHomeKeyWakeUp = true
 var gBVolumeKeyWakeUp = true
 var gBVoiceWakeUp = true
 var gBExcludeFromRecents = false
+var gHbApiKey = ""
+var gLightOnUrl = ""
+var gLightOffUrl = ""
 
 //var gIsRecording = false
 
@@ -629,6 +635,9 @@ fun loadSharedPrefs() {
     gBExcludeFromRecents = loadBool(SP_EXCLUDE_FROM_RECENTS, false)
     gWakeUpTipShown = loadBool(SP_WAKE_UP_TIP_SHOWN, false)
     gAccessibilityEnabled = loadBool(SP_ACCESSIBILITY_ENABLED, false)
+    gHbApiKey = loadStr(SP_HB_API_KEY, "")
+    gLightOnUrl = loadStr(SP_LIGHT_ON_URL, "")
+    gLightOffUrl = loadStr(SP_LIGHT_OFF_URL, "")
 }
 
 var mWakeOnPackages: ArrayList<String> = ArrayList()

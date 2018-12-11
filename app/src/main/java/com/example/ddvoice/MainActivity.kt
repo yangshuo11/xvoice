@@ -47,7 +47,7 @@ import java.net.URL
 import java.util.*
 import kotlin.concurrent.thread
 
-//wake up word: 小美小美,关闭手电筒,打开手电筒,开灯开灯,暂停,上一首,下一首,拍照拍照
+//wake up word: 小美小美,关闭手电筒,打开手电筒,开灯开灯,关灯关灯,上一首,下一首
 
 var gAIUIAgent: AIUIAgent? = null
 //var gUrlToLoad = ""
@@ -167,59 +167,11 @@ class MainActivity : Activity(), EventListener {
         Log.i("lyn-" + getLocalClassName(), "onCreate!")
         
         
-        /*if (BuildConfig.DEBUG) {
-        
-            //            onAsrResult("淘宝搜索待定")
-        
-            //            CallAction("爸爸", "", this).start()
-            //            speak("你好，二货")
-            //            CallAction("巴巴", "", this).start()
-            //            SRResult = "电话"
-            //            onAsrResult()
-        
-            //            handleAIUIResult("")
-        
-            handleAIUIResult("{\n" +
-                    "\"category\": \"LXY.app\",\n" +
-                    "\"intentType\": \"custom\",\n" +
-                    "\"rc\": 0,\n" +
-                    "\"semanticType\": 0,\n" +
-                    "\"service\": \"LXY.app\",\n" +
-                    "\"uuid\": \"atn03a0b54f@dx00070ed47856a10e01\",\n" +
-                    "\"vendor\": \"LXY\",\n" +
-                    "\"version\": \"7.0\",\n" +
-                    "-\"semantic\": [\n" +
-                    "-{\n" +
-                    "\"entrypoint\": \"ent\",\n" +
-                    "\"hazard\": false,\n" +
-                    "\"intent\": \"launch_app\",\n" +
-                    "\"score\": 0.8999999761581421,\n" +
-                    "-\"slots\": [\n" +
-                    "-{\n" +
-                    "\"begin\": 0,\n" +
-                    "\"end\": 2,\n" +
-                    "\"name\": \"launch\",\n" +
-                    "\"normValue\": \"打开\",\n" +
-                    "\"value\": \"打开\"\n" +
-                    "},\n" +
-                    "-{\n" +
-                    "\"begin\": 2,\n" +
-                    "\"end\": 4,\n" +
-                    "\"name\": \"any\",\n" +
-                    "\"normValue\": \"小美\",\n" +
-                    "\"value\": \"小美\"\n" +
-                    "}\n" +
-                    "],\n" +
-                    "\"template\": \"{launch}{any}\"\n" +
-                    "}\n" +
-                    "],\n" +
-                    "\"state\": null,\n" +
-                    "\"sid\": \"atn03a0b54f@dx00070ed47856a10e01\",\n" +
-                    "\"text\": \"打开小美\"\n" +
-                    "}".replace("-","").replace("\n",""))
-            
-            return
-        }*/
+//        if (BuildConfig.DEBUG) {
+////            handleAIUIResult("".replace("-","").replace("\n",""))
+//            addHabiticaTodo("测试")
+//            return
+//        }
         
         if (intent.action == "show_wake_up_tip") {
             speak("主子，因为不想占用麦克风，而影响需要录音的app，解锁且不在桌面时我就听不到你的召唤了哦。" +
@@ -875,10 +827,11 @@ class MainActivity : Activity(), EventListener {
                         }
                     }
                     "dida_task" -> {
-                        sayOK()
-                        gWxContact = "滴答清单"
-                        gWxContent = getSlotValueByName("content") ?: ""
-                        wxContact()
+//                        sayOK()
+//                        gWxContact = "滴答清单"
+//                        gWxContent = getSlotValueByName("content") ?: ""
+//                        wxContact()
+                        addHabiticaTodo(getSlotValueByName("content") ?: "")
                     }
                     "send_redbag" -> {
                         val howMuch = getSlotValueByName("how_much")
