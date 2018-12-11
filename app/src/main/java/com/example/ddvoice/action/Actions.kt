@@ -254,8 +254,9 @@ fun turnOnUsageAccess() {
 
 fun turnOnLight() {
     speak("开灯")
+//    Log.i("lyn----------", "light on url:" + gLightOnUrl)
     val request = JsonObjectRequest(
-            Request.Method.GET, gLightOffUrl,
+            Request.Method.GET, gLightOnUrl,
             null, { jsonObj -> }, { jsonObj -> })
     gVolleyQueue.add(request)
 }

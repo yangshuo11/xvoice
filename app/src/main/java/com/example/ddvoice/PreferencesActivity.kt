@@ -6,11 +6,11 @@ import android.preference.PreferenceActivity
 import android.view.WindowManager
 
 
-class PreferencesActivity : PreferenceActivity(), Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
-    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
-        loadSharedPrefs()
-        return true
-    }
+class PreferencesActivity : PreferenceActivity(), Preference.OnPreferenceClickListener {
+//    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
+//        loadSharedPrefs()
+//        return true
+//    }
     
     override fun onPreferenceClick(preference: Preference?): Boolean {
         loadSharedPrefs()
@@ -27,13 +27,14 @@ class PreferencesActivity : PreferenceActivity(), Preference.OnPreferenceClickLi
         findPreference(SP_VOICE_WAKE).onPreferenceClickListener = this
         findPreference(SP_VOLUME_KEY_WAKE).onPreferenceClickListener = this
         findPreference(SP_EXCLUDE_FROM_RECENTS).onPreferenceClickListener = this
-        findPreference(SP_HB_API_KEY).onPreferenceChangeListener = this
-        findPreference(SP_LIGHT_ON_URL).onPreferenceChangeListener = this
-        findPreference(SP_LIGHT_OFF_URL).onPreferenceChangeListener = this
+//        findPreference(SP_HB_API_KEY).onPreferenceChangeListener = this
+//        findPreference(SP_LIGHT_ON_URL).onPreferenceChangeListener = this
+//        findPreference(SP_LIGHT_OFF_URL).onPreferenceChangeListener = this
     }
     
     override fun onPause() {
         super.onPause()
+        loadSharedPrefs()
         finish()
     }
 }
