@@ -255,7 +255,7 @@ fun turnOnUsageAccess() {
 fun turnOnLight() {
     speak("开灯")
     val request = JsonObjectRequest(
-            Request.Method.GET, "https://maker.ifttt.com/trigger/xv_light_on/with/key/dqRcv4OrkIOThtRCxIH6bq",
+            Request.Method.GET, gLightOffUrl,
             null, { jsonObj -> }, { jsonObj -> })
     gVolleyQueue.add(request)
 }
@@ -264,7 +264,7 @@ fun turnOnLight() {
 fun turnOffLight() {
     speak("关灯")
     val request = JsonObjectRequest(
-            Request.Method.GET, "https://maker.ifttt.com/trigger/xv_light_off/with/key/dqRcv4OrkIOThtRCxIH6bq",
+            Request.Method.GET, gLightOffUrl,
             null, { jsonObj -> }, { jsonObj -> })
     gVolleyQueue.add(request)
 }
@@ -364,7 +364,7 @@ fun loadUrl(url: String, useOtherBrowser: Boolean = false) {
 class JsonObjectHeaderRequest(method: Int, url: String?, jsonRequest: JSONObject?, listener: Response.Listener<JSONObject>?, errorListener: Response.ErrorListener?)
     :JsonObjectRequest(method, url, jsonRequest, listener, errorListener) {
     override fun getHeaders(): MutableMap<String, String> {
-        return mapOf("x-api-key" to "81ceb659-2940-42c3-9871-db8f2a1002e0", "x-api-user" to
+        return mapOf("x-api-key" to gHbApiKey, "x-api-user" to
                 "98741a5f-60b6-4eeb-bf83-e2adb5f570a4").toMutableMap()
     }
 }
