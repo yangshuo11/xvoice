@@ -761,13 +761,13 @@ class MainActivity : Activity(), EventListener {
         }
         
         fun getAttrValueByName(name: String): String? {
-            val slots = semantic?.optJSONArray("slots") ?: return null
+            val slots = semantic?.optJSONObject("slots") ?: return null
             
-            for (i in 0 until slots.length()) {
-                val slot = slots.optJSONObject(i)
-                if (slot.optString("attr") == name) {
-                    return slot.optString("attrValue")
-                }
+            //            for (i in 0 until slots.length()) {
+            //                val slot = slots.optJSONObject(i)
+            if (slots.optString("attr") == name) {
+                return slots.optString("attrValue")
+                //                }
             }
             return null
         }
@@ -1076,7 +1076,7 @@ class MainActivity : Activity(), EventListener {
             "telephone"/*, "LXY.tel"*/ -> {
                 val contact = parsedSemanticResult!!.data?.optJSONArray("result")
                         ?.optJSONObject(0)
-                val name = contact?.optString("name") ?: getSlotValueByName("name") +
+                val name = contact?.optString("name") ?: getSlotValueByName("name")+
                 getSlotValueByName("teleOperator")
                 val code = contact?.optString("phoneNumber") ?: getSlotValueByName("code")
                 //                val name = getSlotValueByName("name")
