@@ -27,6 +27,8 @@ class PreferencesActivity : PreferenceActivity(), Preference.OnPreferenceClickLi
         findPreference(SP_VOICE_WAKE).onPreferenceClickListener = this
         findPreference(SP_VOLUME_KEY_WAKE).onPreferenceClickListener = this
         findPreference(SP_EXCLUDE_FROM_RECENTS).onPreferenceClickListener = this
+        
+        /*不起作用*/
 //        findPreference(SP_HB_API_KEY).onPreferenceChangeListener = this
 //        findPreference(SP_LIGHT_ON_URL).onPreferenceChangeListener = this
 //        findPreference(SP_LIGHT_OFF_URL).onPreferenceChangeListener = this
