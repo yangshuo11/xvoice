@@ -255,6 +255,7 @@ class MainActivity : Activity(), EventListener {
                         TelephonyManager
                 @SuppressLint("MissingPermission")
                 gDeviceId = tm.deviceId
+//                Log.d("lyn----------" + localClassName, "divId:" + gDeviceId)
             }
             
             createAgent()

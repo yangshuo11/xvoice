@@ -108,11 +108,11 @@ class MyAccessibilityService : AccessibilityService() {
         
         gAccessibilityService = this
         //        gAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    
-    
-//        if (BuildConfig.DEBUG) {
-//            Handler().postDelayed({ wxRedBag("") }, 1000L)
-//        }
+        
+        
+        //        if (BuildConfig.DEBUG) {
+        //            Handler().postDelayed({ wxRedBag("") }, 1000L)
+        //        }
         
         registerReceiver(screenOnBroadcastReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
         registerReceiver(screenOffBroadcastReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
@@ -124,12 +124,12 @@ class MyAccessibilityService : AccessibilityService() {
                 "wp.data" -> {
                     when {
                         params!!.contains("拍照拍照") -> {
-//                            turnOnScreen()
-//                            sayOK()
-//                            val starter = Intent()
-//                            starter.action = "android.media.action.STILL_IMAGE_CAMERA_SECURE"
-//                            starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                            startActivity(starter)
+                            //                            turnOnScreen()
+                            //                            sayOK()
+                            //                            val starter = Intent()
+                            //                            starter.action = "android.media.action.STILL_IMAGE_CAMERA_SECURE"
+                            //                            starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            //                            startActivity(starter)
                             launchCamera()
                         }
                         params!!.contains("打开手电筒") -> {
@@ -139,15 +139,15 @@ class MyAccessibilityService : AccessibilityService() {
                             turnOffFlash()
                         }
                         params!!.contains("播放") -> {
-//                            sayOK()
+                            //                            sayOK()
                             replayMusic()
                         }
                         params!!.contains("暂停") -> {
-//                            sayOK()
+                            //                            sayOK()
                             pauseMusic()
                         }
                         params!!.contains("下一首") -> {
-//                            sayOK()
+                            //                            sayOK()
                             nextMusic()
                         }
                         params!!.contains("上一首") -> {
@@ -256,7 +256,7 @@ class MyAccessibilityService : AccessibilityService() {
             for (i in 0..2) content += content
             speak(content)
         } else if (intent?.action == "observe_contacts") {
-//            println("lyn_________:observe_contacts")
+            //            println("lyn_________:observe_contacts")
             //联系人变动监测
             contentResolver.registerContentObserver(
                     ContactsContract.Contacts.CONTENT_URI, true, mContactsObserver)
@@ -285,7 +285,6 @@ class MyAccessibilityService : AccessibilityService() {
     //
     //        return Service.START_STICKY
     //    }
-    
     
     
     /**
@@ -407,6 +406,7 @@ class MyAccessibilityService : AccessibilityService() {
                     //                    print("lyn____________:key long pressed!")
                     
                     //                    startActivity(Intent("STOP_WEB_ACT"))
+                    
                     startMainAct()
                     
                     //post log
@@ -454,9 +454,9 @@ class MyAccessibilityService : AccessibilityService() {
                 timer.schedule(timerTask {
                     //                    print("lyn____________:key long pressed!")
                     
-//                    startActivity(Intent("STOP_WEB_ACT").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    //                    startActivity(Intent("STOP_WEB_ACT").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                     startMainAct()
-    
+                    
                     //post log
                     gLogParams.clear()
                     gLogParams["username"] = gDeviceId
@@ -485,11 +485,18 @@ class MyAccessibilityService : AccessibilityService() {
                     //                    clickCount++
                     
                     //上次单击设置的定时器已经停止，说明上次是单击，否则说明上次是双击的第一次
-                    if (dbcTimerRunning) {
+                    if (dbcTimerRunning) {  //执行双击动作，取消定时器
                         performGlobalAction(AccessibilityService
                                 .GLOBAL_ACTION_RECENTS)
-                        timer_dbc.cancel()      //完成双击判断，取消定时器
-                    } else performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
+                        timer_dbc.cancel()
+                    } else { //执行单击动作
+                        if (gDeviceId == "99000789007145") {  //Author's phone
+                            //                        stAct("com.microsoft.launcher", "com.microsoft.launcher.Launcher")
+                            stAct("ch.deletescape.lawnchair", "ch.deletescape.lawnchair.Launcher")
+                        } else {
+                            performGlobalAction(GLOBAL_ACTION_HOME)
+                        }
+                    }
                     
                     timer_dbc = Timer()
                     timer_dbc.schedule(timerTask {

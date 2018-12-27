@@ -31,6 +31,10 @@ fun Context.stAct(intent: Intent) {
     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 }
 
+fun Context.stAct(pkg: String, cls: String) {
+    stAct(Intent().setComponent(ComponentName(pkg, cls)))
+}
+
 fun launchCamera() {
     sayOK()
     turnOnScreen()
