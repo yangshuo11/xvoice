@@ -1,10 +1,13 @@
 package com.example.ddvoice.action
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.PowerManager
+import android.util.Log
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
@@ -14,6 +17,7 @@ import com.example.ddvoice.util.*
 import com.github.stuxuhai.jpinyin.PinyinFormat
 import com.github.stuxuhai.jpinyin.PinyinHelper
 import org.json.JSONObject
+import java.util.*
 
 /**
  * Created by Lyn on 18-8-27.
@@ -143,7 +147,7 @@ fun wxContact() {
             if (!gWxContent.isNullOrEmpty()) {
                 Thread.sleep(1000)
                 findEditableAndPaste(gWxContent)
-//                Thread.sleep(500)
+                //                Thread.sleep(500)
                 findTextAndClick2("发送")
             }
         } else if (!gWxContent.isNullOrEmpty()) {
@@ -156,8 +160,8 @@ fun wxContact() {
             }
         }
         
-//        if (gWxContact == "滴答清单") {
-//        }
+        //        if (gWxContact == "滴答清单") {
+        //        }
         //            gWxContact = ""
         
     } catch (e: Exception) {
@@ -193,7 +197,6 @@ fun addHabiticaTodo(text: String) {
     )
     gVolleyQueue.add(request)
 }
-
 
 
 /**
@@ -258,7 +261,7 @@ fun turnOnUsageAccess() {
 
 fun turnOnLight() {
     speak("开灯")
-//    Log.i("lyn----------", "light on url:" + gLightOnUrl)
+    //    Log.i("lyn----------", "light on url:" + gLightOnUrl)
     val request = JsonObjectRequest(
             Request.Method.GET, gLightOnUrl,
             null, { jsonObj -> }, { jsonObj -> })
@@ -366,8 +369,30 @@ fun loadUrl(url: String, useOtherBrowser: Boolean = false) {
     }
 }
 
+fun setWakeUpAlarmClock(/*time: Date*/) {
+    
+    val contentIntent = Intent(gApplicationContext, MyAccessibilityService::class.java)
+    contentIntent.setAction("do_wakeup_alarm")
+    val pendingIntent = PendingIntent.getService(gApplicationContext, 0, contentIntent, PendingIntent
+            .FLAG_CANCEL_CURRENT)
+    
+    val calendar = Calendar.getInstance()
+    val alarmCalendar = Calendar.getInstance()
+    
+    alarmCalendar.set(Calendar.HOUR_OF_DAY, 16)
+    alarmCalendar.set(Calendar.MINUTE, 49)
+    
+    if (calendar.timeInMillis >= alarmCalendar.timeInMillis) {
+        alarmCalendar.timeInMillis += 24 * 3600 * 1000
+    }
+    Log.i("lyn----------", "alarm time:" + alarmCalendar.time.toString())
+    
+    val aManager: AlarmManager = gApplicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    aManager.set(AlarmManager.RTC_WAKEUP, alarmCalendar.timeInMillis, pendingIntent)
+}
+
 class JsonObjectHeaderRequest(method: Int, url: String?, jsonRequest: JSONObject?, listener: Response.Listener<JSONObject>?, errorListener: Response.ErrorListener?)
-    :JsonObjectRequest(method, url, jsonRequest, listener, errorListener) {
+    : JsonObjectRequest(method, url, jsonRequest, listener, errorListener) {
     override fun getHeaders(): MutableMap<String, String> {
         return mapOf("x-api-key" to gHbApiKey, "x-api-user" to
                 "98741a5f-60b6-4eeb-bf83-e2adb5f570a4").toMutableMap()

@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley
 import com.baidu.tts.chainofresponsibility.logger.LoggerProxy
 import com.baidu.tts.client.SpeechSynthesizer
 import com.baidu.tts.client.TtsMode
+import com.example.ddvoice.action.setWakeUpAlarmClock
 import com.example.ddvoice.util.TtsMessageListener
 import com.github.stuxuhai.jpinyin.PinyinFormat
 import com.github.stuxuhai.jpinyin.PinyinHelper
@@ -52,6 +53,7 @@ var gIsSpeaking = false
 var gContactSyncOK = false
 var gFromHeadset = false
 var gIsPhoneLocked: Boolean = false
+var gIsLynsPhone = false    //是否作者的手机
 //var gIsHome: Boolean = false
 val gAppNamePYPackageMap = mutableMapOf<String, String>()
 val gContactNamePYNumMap = mutableMapOf<String, String>()
@@ -774,8 +776,8 @@ class MainApp : Application() {
         Thread({
             updateAppNamePackageMap()
         }).start()
-        
-        
+    
+        if (gIsLynsPhone) setWakeUpAlarmClock()
         
         //所有contact name的拼音和number映射
         //        updateContactNameNumMap(this)

@@ -28,6 +28,7 @@ import com.example.ddvoice.action.*
 import com.example.ddvoice.receiver.ScreenOffBroadcastReceiver
 import com.example.ddvoice.receiver.ScreenOnBroadcastReceiver
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -251,17 +252,43 @@ class MyAccessibilityService : AccessibilityService() {
         println("lyn_________:my service started!")
         //        Toast.makeText(this, "lyn_________:my service started!", Toast.LENGTH_SHORT).show();
         //        startWakeUp()
-        if (intent?.action == "do_alarm") {
-            var content = "主人，" + (intent!!.getStringExtra("content") ?: "提醒时间到啦") + "。"
-            for (i in 0..2) content += content
-            speak(content)
-        } else if (intent?.action == "observe_contacts") {
-            //            println("lyn_________:observe_contacts")
-            //联系人变动监测
-            contentResolver.registerContentObserver(
-                    ContactsContract.Contacts.CONTENT_URI, true, mContactsObserver)
+        when (intent?.action) {
+            "do_alarm" -> {
+                var content = "主人，" + (intent!!.getStringExtra("content") ?: "提醒时间到啦") + "。"
+                for (i in 0..2) content += content
+                speak(content)
+            }
+            "do_wakeup_alarm" -> {
+                val date = Calendar.getInstance().time
+                val dateStr = SimpleDateFormat("yyyyMMdd").format(date)
+//                Log.d("lyn- onStartCommand", dateStr)
+                val request = JsonObjectRequest(
+                        Request.Method.GET, "http://api.k780.com/?app=life" +
+                        ".workday&date=$dateStr&appkey=10003&sign" +
+                        "=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json",
+                        JSONObject(gLogParams), { jsonObj ->
+                    val workmk = jsonObj.getJSONObject("result")["workmk"]
+                    if (workmk == "1") {
+//                        Log.d("lyn- onStartCommand", "work day alarm trig!")
+                        turnOnLight()
+                        var content = "主人，起床啦"
+                        for (i in 0..1) content += content
+                        speak(content)
+                    } /*else {
+                        Log.d("lyn- onStartCommand", "work day alarm not trig!")
+                    }*/
+                }, {})
+                gVolleyQueue.add(request)
+                
+                setWakeUpAlarmClock()
+            }
+            "observe_contacts" -> //            println("lyn_________:observe_contacts")
+                //联系人变动监测
+                contentResolver.registerContentObserver(
+                        ContactsContract.Contacts.CONTENT_URI, true, mContactsObserver)
         }
         return Service.START_STICKY //super.onStartCommand(intent, flags, startId)
+        //super.onStartCommand(intent, flags, startId)
     }
     
     private val mContactsObserver = object : ContentObserver(Handler()) {
@@ -490,7 +517,7 @@ class MyAccessibilityService : AccessibilityService() {
                                 .GLOBAL_ACTION_RECENTS)
                         timer_dbc.cancel()
                     } else { //执行单击动作
-                        if (gDeviceId == "99000789007145") {  //Author's phone
+                        if (gIsLynsPhone) {  //Author's phone
                             //                        stAct("com.microsoft.launcher", "com.microsoft.launcher.Launcher")
                             stAct("ch.deletescape.lawnchair", "ch.deletescape.lawnchair.Launcher")
                         } else {

@@ -254,8 +254,9 @@ class MainActivity : Activity(), EventListener {
                 val tm = gApplicationContext!!.getSystemService(Context.TELEPHONY_SERVICE) as
                         TelephonyManager
                 @SuppressLint("MissingPermission")
-                gDeviceId = tm.deviceId
+                gDeviceId = tm.imei ?: tm.meid
 //                Log.d("lyn----------" + localClassName, "divId:" + gDeviceId)
+                if (gDeviceId == "99000789007145") gIsLynsPhone = true
             }
             
             createAgent()
