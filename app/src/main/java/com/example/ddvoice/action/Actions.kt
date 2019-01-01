@@ -379,8 +379,8 @@ fun setWakeUpAlarmClock(/*time: Date*/) {
     val calendar = Calendar.getInstance()
     val alarmCalendar = Calendar.getInstance()
     
-    alarmCalendar.set(Calendar.HOUR_OF_DAY, 16)
-    alarmCalendar.set(Calendar.MINUTE, 49)
+    alarmCalendar.set(Calendar.HOUR_OF_DAY, 7)
+    alarmCalendar.set(Calendar.MINUTE, 20)
     
     if (calendar.timeInMillis >= alarmCalendar.timeInMillis) {
         alarmCalendar.timeInMillis += 24 * 3600 * 1000

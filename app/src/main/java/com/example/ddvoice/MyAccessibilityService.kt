@@ -271,9 +271,9 @@ class MyAccessibilityService : AccessibilityService() {
                     if (workmk == "1") {
 //                        Log.d("lyn- onStartCommand", "work day alarm trig!")
                         turnOnLight()
-                        var content = "主人，起床啦"
-                        for (i in 0..1) content += content
-                        speak(content)
+//                        var content = "主人，起床啦"
+//                        for (i in 0..1) content += content
+//                        speak(content)
                     } /*else {
                         Log.d("lyn- onStartCommand", "work day alarm not trig!")
                     }*/
