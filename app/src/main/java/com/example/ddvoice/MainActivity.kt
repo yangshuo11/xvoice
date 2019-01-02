@@ -256,7 +256,7 @@ class MainActivity : Activity(), EventListener {
                 @SuppressLint("MissingPermission")
                 gDeviceId = tm.imei ?: tm.meid
 //                Log.d("lyn----------" + localClassName, "divId:" + gDeviceId)
-                if (gDeviceId == "99000789007145") gIsLynsPhone = true
+                if (gDeviceId == "352341090129851") gIsLynsPhone = true
             }
             
             createAgent()
