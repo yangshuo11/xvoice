@@ -19,6 +19,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.baidu.speech.EventManager
@@ -332,7 +333,8 @@ class MyAccessibilityService : AccessibilityService() {
     
     
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        Log.d(TAG, "onAccessibilityEvent:" + event.eventType)
+        val eventType = event.eventType
+        Log.d(TAG, "onAccessibilityEvent:" + eventType)
         val sourcePackageName = event.packageName as String? ?: ""
         //        currntApplicationPackage = sourcePackageName
         Log.d(TAG, "sourcePackageName:$sourcePackageName")
@@ -340,9 +342,11 @@ class MyAccessibilityService : AccessibilityService() {
         //        Log.d(TAG, "isHome:" + isHome())
         
         //        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        if (eventType != TYPE_WINDOW_CONTENT_CHANGED) {
+            gStartTime = Date().time
+        }
         
-        
-        when (event.eventType) {
+        when (eventType) {
             AccessibilityEvent.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION -> Log.d(TAG, "CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION")
             AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED -> {
                 Log.d(TAG, "TYPE_WINDOW_STATE_CHANGED");
@@ -513,8 +517,13 @@ class MyAccessibilityService : AccessibilityService() {
                     
                     //上次单击设置的定时器已经停止，说明上次是单击，否则说明上次是双击的第一次
                     if (dbcTimerRunning) {  //执行双击动作，取消定时器
-                        performGlobalAction(AccessibilityService
-                                .GLOBAL_ACTION_RECENTS)
+                        if (gIsLynsPhone) {  //Author's phone
+                            //                        stAct("com.microsoft.launcher", "com.microsoft.launcher.Launcher")
+                            stAct("ch.deletescape.lawnchair", "ch.deletescape.lawnchair.Launcher")
+                        } else {
+                            performGlobalAction(AccessibilityService
+                                    .GLOBAL_ACTION_RECENTS)
+                        }
                         timer_dbc.cancel()
                     } else { //执行单击动作
                         if (gIsLynsPhone) {  //Author's phone

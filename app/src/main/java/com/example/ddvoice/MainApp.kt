@@ -54,6 +54,8 @@ var gContactSyncOK = false
 var gFromHeadset = false
 var gIsPhoneLocked: Boolean = false
 var gIsLynsPhone = false    //是否作者的手机
+var gStartTime: Long = 0L
+
 //var gIsHome: Boolean = false
 val gAppNamePYPackageMap = mutableMapOf<String, String>()
 val gContactNamePYNumMap = mutableMapOf<String, String>()
@@ -112,17 +114,6 @@ private fun initTTs() {
     }
     
     LoggerProxy.printable(true) // 日志打印在logcat中
-    //    val isMix = ttsMode == TtsMode.MIX
-    var isSuccess: Boolean
-    //    if (isMix) {
-    //        // 检查2个离线资源是否可读
-    //        isSuccess = checkOfflineResources()
-    //        if (!isSuccess) {
-    //            return
-    //        } else {
-    //            print("离线资源存在并且可读, 目录：$TEMP_DIR")
-    //        }
-    //    }
     
     // 日志更新在UI中，可以换成MessageListener，在logcat中查看日志
     val listener = TtsMessageListener() //UiMessageListener(mainHandler)
@@ -142,19 +133,6 @@ private fun initTTs() {
     result = gTts.setApiKey(appKey, secretKey)
     checkResult(result, "setApiKey")
     
-    // 4. 支持离线的话，需要设置离线模型
-    /*if (isMix) {
-        // 检查离线授权文件是否下载成功，离线授权文件联网时SDK自动下载管理，有效期3年，3年后的最后一个月自动更新。
-        isSuccess = checkAuth()
-        if (!isSuccess) {
-            return
-        }
-        // 文本模型文件路径 (离线引擎使用)， 注意TEXT_FILENAME必须存在并且可读
-        gSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_TEXT_MODEL_FILE, TEXT_FILENAME)
-        // 声学模型文件路径 (离线引擎使用)， 注意TEXT_FILENAME必须存在并且可读
-        gSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE, MODEL_FILENAME)
-    }*/
-    
     // 5. 以下setParam 参数选填。不填写则默认值生效
     // 设置在线发声音人： 0 普通女声（默认） 1 普通男声 2 特别男声 3 情感男声<度逍遥> 4 情感儿童声<度丫丫>
     gTts.setParam(SpeechSynthesizer.PARAM_SPEAKER, "4")
@@ -169,44 +147,7 @@ private fun initTTs() {
     gTts.setParam(SpeechSynthesizer.PARAM_AUDIO_ENCODE, SpeechSynthesizer.AUDIO_ENCODE_PCM);
     gTts.setParam(SpeechSynthesizer.PARAM_AUDIO_RATE, SpeechSynthesizer.AUDIO_BITRATE_PCM);
     
-    //    gSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_MIX_MODE, SpeechSynthesizer.MIX_MODE_DEFAULT)
-    // 该参数设置为TtsMode.MIX生效。即纯在线模式不生效。
-    // MIX_MODE_DEFAULT 默认 ，wifi状态下使用在线，非wifi离线。在线状态下，请求超时6s自动转离线
-    // MIX_MODE_HIGH_SPEED_SYNTHESIZE_WIFI wifi状态下使用在线，非wifi离线。在线状态下， 请求超时1.2s自动转离线
-    // MIX_MODE_HIGH_SPEED_NETWORK ， 3G 4G wifi状态下使用在线，其它状态离线。在线状态下，请求超时1.2s自动转离线
-    // MIX_MODE_HIGH_SPEED_SYNTHESIZE, 2G 3G 4G wifi状态下使用在线，其它状态离线。在线状态下，请求超时1.2s自动转离线
-    
     gTts.setAudioStreamType(AudioManager.MODE_CURRENT)
-    
-    // x. 额外 ： 自动so文件是否复制正确及上面设置的参数
-    val params = HashMap<String, String>()
-    // 复制下上面的 gSpeechSynthesizer.setParam参数
-    // 上线时请删除AutoCheck的调用
-    /* if (isMix) {
-         params[SpeechSynthesizer.PARAM_TTS_TEXT_MODEL_FILE] = TEXT_FILENAME
-         params[SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE] = MODEL_FILENAME
-     }*/
-    
-    
-    /*val initConfig = InitConfig(appId, appKey, secretKey, ttsMode, params, listener)
-    AutoCheck.getInstance(getApplicationContext()).check(initConfig, object : Handler() {
-        override
-                */
-    /**
-     * 开新线程检查，成功后回调
-     *//*
-        fun handleMessage(msg: Message) {
-            if (msg.what == 100) {
-                val autoCheck = msg.obj as AutoCheck
-                synchronized(autoCheck) {
-                    val message = autoCheck.obtainDebugMessage()
-                    print(message) // 可以用下面一行替代，在logcat中查看代码
-                    // Log.w("AutoCheckMessage", message);
-                }
-            }
-        }
-        
-    })*/
     
     // 6. 初始化
     result = gTts.initTts(ttsMode)
@@ -511,7 +452,6 @@ lateinit var gApplicationContext: Context
 lateinit var gAccessibilityService: MyAccessibilityService
 
 
-
 private var mSharedPreferences: SharedPreferences? = null
 
 fun loadStr(key: String, defStr: String): String {
@@ -728,7 +668,6 @@ private fun initAudioTrack() {
 }
 
 
-
 val gLogParams = HashMap<String, String>()
 lateinit var gVolleyQueue: RequestQueue
 val gLogUrl = "http://121.40.106.47:6000/log/asr"
@@ -753,7 +692,7 @@ class MainApp : Application() {
         //地图
         mWakeOnPackages.add("com.baidu.BaiduMap")
         mWakeOnPackages.add("com.autonavi")
-    
+        
         gVolleyQueue = Volley.newRequestQueue(gApplicationContext)
         
         startChecker()
@@ -776,7 +715,7 @@ class MainApp : Application() {
         Thread({
             updateAppNamePackageMap()
         }).start()
-    
+        
         if (gIsLynsPhone) setWakeUpAlarmClock()
         
         //所有contact name的拼音和number映射
